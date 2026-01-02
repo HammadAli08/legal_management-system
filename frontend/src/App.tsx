@@ -106,7 +106,7 @@ const App: React.FC = () => {
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-16">
                                     {[
-                                        { name: "Hammad Ali Tahir", detail: "University of Education Lahore", isLead: true },
+                                        { name: "Hammad Ali Tahir", detail: "University of Education Lahore" },
                                         { name: "Muhammad Usama Sharaf", detail: "Data Scientist at Algo" },
                                         { name: "Madiha Farman", detail: "Kohat University of Science and Technology" },
                                         { name: "Muhammad Zeeshan", detail: "Leads University Lahore" }
@@ -114,7 +114,6 @@ const App: React.FC = () => {
                                         <div key={i} className="flex flex-col group">
                                             <span className="font-bold text-royal text-lg flex items-center gap-3 transition-colors group-hover:text-gold">
                                                 {member.name}
-                                                {member.isLead && <span className="text-[10px] bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20 uppercase tracking-widest font-black">Contributor</span>}
                                             </span>
                                             <span className="text-slate/50 text-sm mt-1">{member.detail}</span>
                                         </div>
