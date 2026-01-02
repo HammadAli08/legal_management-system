@@ -1,5 +1,10 @@
 import os
 import pickle
+import warnings
+from sklearn.exceptions import InconsistentVersionWarning
+
+# Suppress sklearn version mismatch warnings
+warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
 
 def get_model_path(folder_name, file_name):
     """Robustly find the path to a model file by searching parent directories."""
