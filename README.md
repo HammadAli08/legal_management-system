@@ -2,6 +2,9 @@
 
 A prestigious, AI-powered toolkit for judicial professionals, featuring case classification, urgency prioritization, and a context-aware legal assistant trained on thousands of precedents.
 
+**Live Application**: [https://legal-management-system-x9sc.onrender.com](https://legal-management-system-x9sc.onrender.com)
+**Service ID**: `srv-d5bqdgili9vc73btfllg`
+
 ## 🏛️ Overview
 
 The Legal AI Management System is designed to revolutionize legal workflows with forensic precision. It leverages modern NLP and Machine Learning techniques to streamline the analysis of legal documents, categorize jurisdictions, and provide rapid research assistance through a Retrieval-Augmented Generation (RAG) pipeline.
