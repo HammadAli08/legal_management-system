@@ -9,9 +9,16 @@ import os
 # Load environment variables from .env
 load_dotenv()
 
+import sys
+# Add the project root to sys.path to resolve 'backend' module when running on Render
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.services import classifier, prioritizer, rag
+try:
+    from backend.services import classifier, prioritizer, rag
+except ImportError:
+    from services import classifier, prioritizer, rag
 import uvicorn
 
 app = FastAPI(title="Legal AI API")

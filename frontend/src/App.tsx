@@ -27,7 +27,7 @@ const App: React.FC = () => {
                     <div className="p-2 bg-gold/20 rounded-lg">
                         <Gavel className="text-gold w-6 h-6" />
                     </div>
-                    <h1 className="text-xl font-bold tracking-tight text-cream">Legal AI</h1>
+                    <h1 className="text-xl font-bold tracking-tight text-cream">Legal toolkit</h1>
                 </div>
 
                 <nav className="flex-1 space-y-3">
@@ -66,7 +66,7 @@ const App: React.FC = () => {
                             className="max-w-5xl mx-auto"
                         >
                             <div className="mb-12">
-                                <h2 className="text-5xl font-bold mb-6 text-royal tracking-tight">Precedent Search & Management</h2>
+                                <h2 className="text-5xl font-bold mb-6 text-royal tracking-tight">AI-Powered Legal Case Management System</h2>
                                 <p className="text-xl text-slate/70 leading-relaxed max-w-3xl">
                                     Revolutionizing legal workflows with forensic precision. Our AI-powered toolkit streamlines case classification, determines urgency with predictive modeling, and provides context-aware legal research assistance.
                                 </p>

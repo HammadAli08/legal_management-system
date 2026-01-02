@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../api/api';
 import { Send, Loader2, CheckCircle } from 'lucide-react';
@@ -8,6 +8,14 @@ const Classifier: React.FC = () => {
     const [result, setResult] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [text]);
 
     const handlePredict = async () => {
         if (!text.trim()) return;
@@ -45,10 +53,11 @@ const Classifier: React.FC = () => {
             <div className="bg-white border border-gold/10 rounded-[2.5rem] p-10 shadow-2xl shadow-gold/5 backdrop-blur-sm transition-all hover:border-gold/30">
                 <label className="block text-royal/40 text-xs font-black uppercase tracking-[0.2em] mb-4 ml-2">Case Transcription / Documents</label>
                 <textarea
+                    ref={textareaRef}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Paste the legal text here for automatic categorization..."
-                    className="w-full h-72 bg-cream/50 border border-gold/10 rounded-3xl p-8 text-royal placeholder:text-royal/20 focus:outline-none focus:ring-4 focus:ring-gold/10 focus:border-gold/30 transition-all resize-none mb-8 leading-relaxed text-lg"
+                    className="w-full min-h-[120px] bg-cream/50 border border-gold/10 rounded-3xl p-8 text-royal placeholder:text-royal/20 focus:outline-none focus:ring-4 focus:ring-gold/10 focus:border-gold/30 transition-all resize-none mb-8 leading-relaxed text-lg overflow-hidden"
                 />
 
                 <button

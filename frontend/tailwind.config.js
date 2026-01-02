@@ -17,6 +17,10 @@ export default {
                 'bg-forest': '#E8F5E9',   // Light Green
                 'bg-blue': '#E3F2FD',     // Light Blue
             },
+            fontFamily: {
+                cinzel: ['Cinzel', 'serif'],
+                playfair: ['Playfair Display', 'serif'],
+            },
         },
     },
     plugins: [],

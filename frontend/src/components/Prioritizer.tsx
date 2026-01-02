@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../api/api';
 import { Zap, Loader2, AlertTriangle } from 'lucide-react';
@@ -8,6 +8,14 @@ const Prioritizer: React.FC = () => {
     const [result, setResult] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [text]);
 
     const handlePredict = async () => {
         if (!text.trim()) return;
@@ -26,7 +34,7 @@ const Prioritizer: React.FC = () => {
 
     const getPriorityStyles = (priority: string) => {
         switch (priority.toLowerCase()) {
-            case 'high': return 'bg-burgundy text-gold border-gold/30 shadow-burgundy/20';
+            case 'high': return 'bg-burgundy text-gold border-gold/30 shadow-burgundy/40 scale-105';
             case 'medium': return 'bg-slate text-gold border-gold/20 shadow-slate/20';
             case 'low': return 'bg-cream text-royal border-gold/10 shadow-royal/5';
             default: return 'bg-royal text-gold';
@@ -54,10 +62,11 @@ const Prioritizer: React.FC = () => {
             <div className="bg-white border border-gold/10 rounded-[2.5rem] p-10 shadow-2xl shadow-gold/5 backdrop-blur-sm transition-all hover:border-gold/30">
                 <label className="block text-royal/40 text-xs font-black uppercase tracking-[0.2em] mb-4 ml-2">Incident Details / Urgency Indicators</label>
                 <textarea
+                    ref={textareaRef}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Paste the case text here to determine processing priority..."
-                    className="w-full h-72 bg-cream/50 border border-gold/10 rounded-3xl p-8 text-royal placeholder:text-royal/20 focus:outline-none focus:ring-4 focus:ring-gold/10 focus:border-gold/30 transition-all resize-none mb-8 leading-relaxed text-lg"
+                    className="w-full min-h-[120px] bg-cream/50 border border-gold/10 rounded-3xl p-8 text-royal placeholder:text-royal/20 focus:outline-none focus:ring-4 focus:ring-gold/10 focus:border-gold/30 transition-all resize-none mb-8 leading-relaxed text-lg overflow-hidden"
                 />
 
                 <button
@@ -76,7 +85,7 @@ const Prioritizer: React.FC = () => {
                         className="mt-10 p-10 border border-gold/10 rounded-[2rem] bg-cream/30 flex flex-col items-center gap-6"
                     >
                         <div className="text-royal/40 text-xs font-black uppercase tracking-[0.3em]">Calculated Priority Level</div>
-                        <div className={`px-12 py-4 rounded-2xl border font-black text-3xl uppercase tracking-tighter shadow-2xl ${getPriorityStyles(result)} transition-all animate-pulse`}>
+                        <div className={`px-12 py-6 rounded-2xl border font-cinzel font-black text-4xl uppercase tracking-[0.15em] shadow-2xl ${getPriorityStyles(result)} transition-all animate-pulse flex items-center justify-center`}>
                             {result}
                         </div>
                     </motion.div>
