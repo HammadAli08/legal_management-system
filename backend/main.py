@@ -1,8 +1,6 @@
 import warnings
 print(">>> [main.py] Loading module...")
 warnings.simplefilter(action='ignore', category=FutureWarning)
-from sklearn.exceptions import InconsistentVersionWarning
-warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
 
 from dotenv import load_dotenv
 import os

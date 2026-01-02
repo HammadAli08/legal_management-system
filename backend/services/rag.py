@@ -2,19 +2,6 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
 import os
-from langchain_qdrant import QdrantVectorStore
-from qdrant_client import QdrantClient
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_groq import ChatGroq
-from langchain_classic.chains import create_retrieval_chain, create_history_aware_retriever
-from langchain_classic.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.messages import HumanMessage, AIMessage
-
-# Reranking imports
-from langchain_classic.retrievers import ContextualCompressionRetriever
-from langchain_classic.retrievers.document_compressors import CrossEncoderReranker
-from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 
 router = APIRouter()
 
@@ -36,6 +23,21 @@ def get_rag_chain():
     global _rag_chain
     if _rag_chain is not None:
         return _rag_chain
+
+    print(">>> [RAG] Loading heavy dependencies...")
+    from langchain_qdrant import QdrantVectorStore
+    from qdrant_client import QdrantClient
+    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_groq import ChatGroq
+    from langchain_classic.chains import create_retrieval_chain, create_history_aware_retriever
+    from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+    from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+    
+    # Reranking imports
+    from langchain_classic.retrievers import ContextualCompressionRetriever
+    from langchain_classic.retrievers.document_compressors import CrossEncoderReranker
+    from langchain_community.cross_encoders import HuggingFaceCrossEncoder
+    print(">>> [RAG] Heavy dependencies loaded.")
 
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -113,7 +115,7 @@ async def chat(input_data: ChatInput):
     try:
         rag_chain = get_rag_chain()
         
-        # Convert history
+        from langchain_core.messages import HumanMessage, AIMessage
         chat_history = []
         for msg in input_data.history:
             if msg.role == "user":
