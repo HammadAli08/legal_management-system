@@ -33,6 +33,8 @@ dist-ssr
 
 # ML Models
 *.pkl
+!backend/Case Classification/*.pkl
+!backend/Case Prioritization/*.pkl
 *.h5
 *.joblib
 *.onnx

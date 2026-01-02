@@ -1,19 +1,18 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 try:
-    from backend.utils.models import load_pickle
+    from backend.utils.models import load_pickle, get_model_path
     from backend.utils.preprocessing import preprocess_text
 except ImportError:
-    from utils.models import load_pickle
+    from utils.models import load_pickle, get_model_path
     from utils.preprocessing import preprocess_text
 import os
 
 router = APIRouter()
 
-# Paths relative to the file's directory
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PIPELINE_PATH = os.path.join(BASE_PATH, "Case Classification", "voting_pipeline.pkl")
-LABEL_PATH = os.path.join(BASE_PATH, "Case Classification", "label_encoder.pkl")
+# Centralized Path Resolution
+PIPELINE_PATH = get_model_path("Case Classification", "voting_pipeline.pkl")
+LABEL_PATH = get_model_path("Case Classification", "label_encoder.pkl")
 print(f">>> [Classifier] PIELINE_PATH: {PIPELINE_PATH}")
 
 print(">>> [Classifier] Loading models...")

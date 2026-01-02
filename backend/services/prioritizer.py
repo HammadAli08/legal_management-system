@@ -1,19 +1,20 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 try:
-    from backend.utils.models import load_pickle
+    from backend.utils.models import load_pickle, get_model_path
+except ImportError:
+    from utils.models import load_pickle, get_model_path
+try:
     from backend.utils.preprocessing import preprocess_text
 except ImportError:
-    from utils.models import load_pickle
     from utils.preprocessing import preprocess_text
 import os
 
 router = APIRouter()
 
-# Paths relative to the file's directory
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PIPELINE_PATH = os.path.join(BASE_PATH, "Case Prioritization", "stacking_pipeline.pkl")
-LABEL_PATH = os.path.join(BASE_PATH, "Case Prioritization", "label_encoder.pkl")
+# Centralized Path Resolution
+PIPELINE_PATH = get_model_path("Case Prioritization", "stacking_pipeline.pkl")
+LABEL_PATH = get_model_path("Case Prioritization", "label_encoder.pkl")
 print(f">>> [Prioritizer] PIPELINE_PATH: {PIPELINE_PATH}")
 
 print(">>> [Prioritizer] Loading models...")
