@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/api';
 import { Send, Loader2, CheckCircle } from 'lucide-react';
 
 const Classifier: React.FC = () => {
@@ -15,7 +15,7 @@ const Classifier: React.FC = () => {
         setError(null);
         setResult(null);
         try {
-            const response = await axios.post('/api/v1/classify', { text });
+            const response = await api.post('/api/v1/classify', { text });
             setResult(response.data.category);
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Failed to classify case.');

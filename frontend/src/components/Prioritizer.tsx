@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/api';
 import { Zap, Loader2, AlertTriangle } from 'lucide-react';
 
 const Prioritizer: React.FC = () => {
@@ -15,7 +15,7 @@ const Prioritizer: React.FC = () => {
         setError(null);
         setResult(null);
         try {
-            const response = await axios.post('/api/v1/prioritize', { text });
+            const response = await api.post('/api/v1/prioritize', { text });
             setResult(response.data.priority);
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Failed to prioritize case.');

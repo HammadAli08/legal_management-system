@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/api';
 import { MessageSquare, Send, Loader2, BookOpen, ChevronDown, User, Bot } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -36,7 +36,7 @@ const Chat: React.FC = () => {
 
         try {
             const history = messages.map(m => ({ role: m.role, content: m.content }));
-            const response = await axios.post('/api/v1/chat', {
+            const response = await api.post('/api/v1/chat', {
                 message: input,
                 history
             });
