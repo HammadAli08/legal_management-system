@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+scikit-learn
+nltk
+langchain
+langchain-groq
+langchain-huggingface
+langchain-qdrant
+qdrant-client
+sentence-transformers
+langchain-community
+langchain-classic
+pandas
+numpy
+python-dotenv

@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-slate font-serif m-0 min-h-screen;
+    display: block;
+    place-items: initial;
+    min-width: 0;
+  }
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cream;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-royal/20 rounded-full border-4 border-cream;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-royal/40;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Typography & Prose Overrides */
+.prose {
+  @apply text-slate max-w-none;
+}
+
+.prose strong {
+  @apply text-royal font-bold;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply text-royal font-bold;
+}
