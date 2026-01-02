@@ -56,9 +56,16 @@ def get_rag_chain():
         client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
         vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embeddings)
 
-        print(">>> [RAG] Setting up Retriever...")
-        # Use standard retriever (removed heavy CrossEncoder reranker for Render memory safety)
-        retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+        print(">>> [RAG] Setting up Retriever (k=20)...")
+        base_retriever = vector_store.as_retriever(search_kwargs={"k": 20})
+
+        print(">>> [RAG] Initializing Reranker Model (MS-MARCO MiniLM)...")
+        # This model is ~80MB, loading it might take a moment
+        rerank_model = HuggingFaceCrossEncoder(model_name="cross-encoder/ms-marco-MiniLM-L-6-v2")
+        compressor = CrossEncoderReranker(model=rerank_model, top_n=5)
+        
+        print(">>> [RAG] Creating Compression Retriever...")
+        compression_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=base_retriever)
 
         print(">>> [RAG] Initializing Groq LLM (Llama 3.3 70B)...")
         llm = ChatGroq(model_name="llama-3.3-70b-versatile", api_key=GROQ_API_KEY, temperature=0.1)
@@ -74,7 +81,7 @@ def get_rag_chain():
             ("human", "{input}"),
         ])
         print(">>> [RAG] Creating History Aware Retriever...")
-        history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
+        history_aware_retriever = create_history_aware_retriever(llm, compression_retriever, contextualize_q_prompt)
 
         # QA Prompt
         qa_system_prompt = """
