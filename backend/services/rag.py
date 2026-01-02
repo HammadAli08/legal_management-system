@@ -49,17 +49,19 @@ def get_rag_chain():
         raise ValueError(error_msg.strip())
 
     try:
+        print(">>> [RAG] Initializing Embeddings (MiniLM-L6)...")
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        
+        print(">>> [RAG] Connecting to Qdrant...")
         client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
         vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embeddings)
 
-        # Reranking retriever
-        base_retriever = vector_store.as_retriever(search_kwargs={"k": 20})
-        model = HuggingFaceCrossEncoder(model_name="cross-encoder/ms-marco-MiniLM-L-6-v2")
-        compressor = CrossEncoderReranker(model=model, top_n=5)
-        compression_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=base_retriever)
+        print(">>> [RAG] Setting up Retriever...")
+        # Use standard retriever (removed heavy CrossEncoder reranker for Render memory safety)
+        retriever = vector_store.as_retriever(search_kwargs={"k": 5})
 
-        llm = ChatGroq(model_name="openai/gpt-oss-20b", api_key=GROQ_API_KEY, temperature=0.1)
+        print(">>> [RAG] Initializing Groq LLM (Llama 3.3 70B)...")
+        llm = ChatGroq(model_name="llama-3.3-70b-versatile", api_key=GROQ_API_KEY, temperature=0.1)
 
         # Contextualize Question
         contextualize_q_system_prompt = (
@@ -71,7 +73,8 @@ def get_rag_chain():
             MessagesPlaceholder("chat_history"),
             ("human", "{input}"),
         ])
-        history_aware_retriever = create_history_aware_retriever(llm, compression_retriever, contextualize_q_prompt)
+        print(">>> [RAG] Creating History Aware Retriever...")
+        history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
 
         # QA Prompt
         qa_system_prompt = """
@@ -104,8 +107,10 @@ def get_rag_chain():
             MessagesPlaceholder("chat_history"),
             ("human", "{input}"),
         ])
+        print(">>> [RAG] Creating QA Chain...")
         question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
         _rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+        print(">>> [RAG] System Ready.")
         return _rag_chain
     except Exception as e:
         raise RuntimeError(f"Failed to initialize RAG chain: {str(e)}")
@@ -123,7 +128,9 @@ async def chat(input_data: ChatInput):
             else:
                 chat_history.append(AIMessage(content=msg.content))
         
+        print(f">>> [RAG] Invoking chain for query: {input_data.message[:50]}...")
         response = rag_chain.invoke({"input": input_data.message, "chat_history": chat_history})
+        print(">>> [RAG] Chain response received.")
         
         sources = []
         for doc in response.get("context", []):
