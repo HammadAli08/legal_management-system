@@ -14,15 +14,27 @@ router = APIRouter()
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PIPELINE_PATH = os.path.join(BASE_PATH, "Case Classification", "voting_pipeline.pkl")
 LABEL_PATH = os.path.join(BASE_PATH, "Case Classification", "label_encoder.pkl")
+print(f">>> [Classifier] PIELINE_PATH: {PIPELINE_PATH}")
 
-pipeline = load_pickle(PIPELINE_PATH)
-label_encoder = load_pickle(LABEL_PATH)
+print(">>> [Classifier] Loading models...")
+# Global model variables
+pipeline = None
+label_encoder = None
+
+def load_classifier_models():
+    global pipeline, label_encoder
+    if pipeline is None:
+        print(">>> [Classifier] Loading models...")
+        pipeline = load_pickle(PIPELINE_PATH)
+        label_encoder = load_pickle(LABEL_PATH)
+        print(">>> [Classifier] Models loaded.")
 
 class CaseInput(BaseModel):
     text: str
 
 @router.post("/classify")
 async def classify_case(case: CaseInput):
+    load_classifier_models()
     if not case.text.strip():
         raise HTTPException(status_code=400, detail="Text input is empty.")
     

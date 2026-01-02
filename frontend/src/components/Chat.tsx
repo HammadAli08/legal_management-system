@@ -79,9 +79,9 @@ const Chat: React.FC = () => {
             {/* Chat Area */}
             <div className="flex-1 overflow-y-auto space-y-6 mb-8 pr-4 custom-scrollbar">
                 {messages.length === 0 && (
-                    <div className="h-full flex flex-col items-center justify-center opacity-10 mt-20">
-                        <BookOpen size={80} className="mb-6 text-royal" />
-                        <p className="text-2xl font-bold text-royal">Initiate Judicial Inquiry...</p>
+                    <div className="h-full flex flex-col items-center justify-center opacity-30 dark:opacity-50 mt-20 transition-all duration-500">
+                        <BookOpen size={80} className="mb-6 text-royal dark:text-dark-accent" />
+                        <p className="text-2xl font-bold text-royal dark:text-cream">Initiate Judicial Inquiry...</p>
                     </div>
                 )}
 
