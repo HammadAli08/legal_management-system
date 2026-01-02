@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Scale, AlertTriangle, MessageSquare, Home, ChevronRight, Gavel } from 'lucide-react';
+import { Scale, AlertTriangle, MessageSquare, Home, ChevronRight, Gavel, Sun, Moon } from 'lucide-react';
 import Classifier from './components/Classifier';
 import Prioritizer from './components/Prioritizer';
 import Chat from './components/Chat';
 
 const App: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'home' | 'classify' | 'prioritize' | 'chat'>('home');
+    const [darkMode, setDarkMode] = useState(() => {
+        const saved = localStorage.getItem('theme');
+        return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    });
+
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [darkMode]);
 
     const tabs = [
         { id: 'home', label: 'Home', icon: Home },
@@ -16,18 +30,30 @@ const App: React.FC = () => {
     ];
 
     return (
-        <div className="flex h-screen bg-cream text-slate font-serif overflow-hidden">
+        <div className="flex h-screen bg-cream dark:bg-dark-primary text-slate dark:text-dark-text font-serif overflow-hidden">
             {/* Sidebar */}
             <motion.div
                 initial={{ x: -250 }}
                 animate={{ x: 0 }}
-                className="w-64 bg-royal flex flex-col p-6 shadow-2xl z-20"
+                className="w-64 bg-royal dark:bg-dark-secondary flex flex-col p-6 shadow-2xl z-20 border-r border-cream/10 dark:border-dark-border"
             >
-                <div className="flex items-center gap-3 mb-10">
-                    <div className="p-2 bg-gold/20 rounded-lg">
-                        <Gavel className="text-gold w-6 h-6" />
+                <div className="flex items-center justify-between mb-10">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gold/20 rounded-lg">
+                            <Gavel className="text-gold w-6 h-6" />
+                        </div>
+                        <h1 className="text-xl font-bold tracking-tight text-cream">Legal toolkit</h1>
                     </div>
-                    <h1 className="text-xl font-bold tracking-tight text-cream">Legal toolkit</h1>
+                </div>
+
+                <div className="mb-8">
+                    <button
+                        onClick={() => setDarkMode(!darkMode)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-cream transition-all border border-white/10"
+                    >
+                        {darkMode ? <Sun size={20} className="text-gold" /> : <Moon size={20} className="text-gold" />}
+                        <span className="font-bold text-sm">{darkMode ? 'Light Aesthetics' : 'Night Protocol'}</span>
+                    </button>
                 </div>
 
                 <nav className="flex-1 space-y-3">
@@ -36,7 +62,7 @@ const App: React.FC = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${activeTab === tab.id
-                                ? 'bg-gradient-to-r from-gold to-[#F4D03F] text-royal shadow-lg translate-x-1'
+                                ? 'bg-gradient-to-r from-gold to-[#F4D03F] text-royal dark:text-dark-primary shadow-lg translate-x-1'
                                 : 'hover:bg-gold/10 text-cream/70 hover:text-gold'
                                 }`}
                         >
@@ -49,13 +75,13 @@ const App: React.FC = () => {
 
                 <div className="mt-auto pt-6 border-t border-cream/10">
                     <p className="text-[10px] text-cream/40 text-center uppercase tracking-[0.2em] font-bold">
-                        Excellence in Jurisprudence
+                        build for Uraan AI techatone
                     </p>
                 </div>
             </motion.div>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto bg-cream p-10 relative custom-scrollbar">
+            <main className="flex-1 overflow-y-auto bg-cream dark:bg-dark-primary p-10 relative custom-scrollbar">
                 <AnimatePresence mode="wait">
                     {activeTab === 'home' && (
                         <motion.div
@@ -66,17 +92,17 @@ const App: React.FC = () => {
                             className="max-w-5xl mx-auto"
                         >
                             <div className="mb-12">
-                                <h2 className="text-5xl font-bold mb-6 text-royal tracking-tight">AI-Powered Legal Case Management System</h2>
-                                <p className="text-xl text-slate/70 leading-relaxed max-w-3xl">
+                                <h2 className="text-5xl font-bold mb-6 text-royal dark:text-cream tracking-tight">AI-Powered Legal Case Management System</h2>
+                                <p className="text-xl text-slate/70 dark:text-dark-text/70 leading-relaxed max-w-3xl">
                                     Revolutionizing legal workflows with forensic precision. Our AI-powered toolkit streamlines case classification, determines urgency with predictive modeling, and provides context-aware legal research assistance.
                                 </p>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                                 {[
-                                    { title: "Classification", desc: "Categorize cases into Jurisdictions with extreme accuracy.", color: "bg-white border-gold/20", icon: Scale },
-                                    { title: "Prioritization", desc: "Identify high-urgency cases using stacking pipelines.", color: "bg-white border-gold/20", icon: AlertTriangle },
-                                    { title: "RAG Assistant", desc: "Chat with 4000+ verified legal precedents.", color: "bg-white border-gold/20", icon: MessageSquare }
+                                    { title: "Classification", desc: "Categorize cases into Jurisdictions with extreme accuracy.", color: "bg-white dark:bg-dark-secondary border-gold/20 dark:border-dark-border", icon: Scale },
+                                    { title: "Prioritization", desc: "Identify high-urgency cases using stacking pipelines.", color: "bg-white dark:bg-dark-secondary border-gold/20 dark:border-dark-border", icon: AlertTriangle },
+                                    { title: "RAG Assistant", desc: "Chat with 4000+ verified legal precedents.", color: "bg-white dark:bg-dark-secondary border-gold/20 dark:border-dark-border", icon: MessageSquare }
                                 ].map((feature, i) => (
                                     <motion.div
                                         key={i}
@@ -84,11 +110,11 @@ const App: React.FC = () => {
                                         className={`${feature.color} border p-8 rounded-3xl cursor-pointer transition-all bg-white shadow-sm flex flex-col items-center text-center`}
                                         onClick={() => setActiveTab(['classify', 'prioritize', 'chat'][i] as any)}
                                     >
-                                        <div className="p-4 bg-royal/5 rounded-2xl mb-4 text-royal">
+                                        <div className="p-4 bg-royal/5 dark:bg-dark-accent/10 rounded-2xl mb-4 text-royal dark:text-dark-accent">
                                             <feature.icon size={32} />
                                         </div>
-                                        <h3 className="text-xl font-bold mb-2 text-royal">{feature.title}</h3>
-                                        <p className="text-slate/60 text-sm leading-relaxed">{feature.desc}</p>
+                                        <h3 className="text-xl font-bold mb-2 text-royal dark:text-cream">{feature.title}</h3>
+                                        <p className="text-slate/60 dark:text-dark-text/50 text-sm leading-relaxed">{feature.desc}</p>
                                     </motion.div>
                                 ))}
                             </div>
@@ -98,10 +124,10 @@ const App: React.FC = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.5 }}
-                                className="mt-12 p-10 border border-gold/20 bg-white rounded-[2.5rem] shadow-xl shadow-gold/5"
+                                className="mt-12 p-10 border border-gold/20 dark:border-dark-border bg-white dark:bg-dark-secondary rounded-[2.5rem] shadow-xl shadow-gold/5"
                             >
-                                <h3 className="text-xl font-bold text-royal mb-8 flex items-center gap-4">
-                                    <span className="w-12 h-[2px] bg-gold"></span>
+                                <h3 className="text-xl font-bold text-royal dark:text-cream mb-8 flex items-center gap-4">
+                                    <span className="w-12 h-[2px] bg-gold dark:bg-dark-accent"></span>
                                     Development Team
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-16">
@@ -112,10 +138,10 @@ const App: React.FC = () => {
                                         { name: "Muhammad Zeeshan", detail: "Leads University Lahore" }
                                     ].map((member, i) => (
                                         <div key={i} className="flex flex-col group">
-                                            <span className="font-bold text-royal text-lg flex items-center gap-3 transition-colors group-hover:text-gold">
+                                            <span className="font-bold text-royal dark:text-dark-text text-lg flex items-center gap-3 transition-colors group-hover:text-gold dark:group-hover:text-dark-accent">
                                                 {member.name}
                                             </span>
-                                            <span className="text-slate/50 text-sm mt-1">{member.detail}</span>
+                                            <span className="text-slate/50 dark:text-dark-text/40 text-sm mt-1">{member.detail}</span>
                                         </div>
                                     ))}
                                 </div>

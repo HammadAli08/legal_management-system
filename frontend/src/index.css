@@ -4,10 +4,14 @@
 
 @layer base {
   body {
-    @apply bg-cream text-slate font-serif m-0 min-h-screen;
+    @apply bg-cream text-slate font-serif m-0 min-h-screen transition-colors duration-500;
     display: block;
     place-items: initial;
     min-width: 0;
+  }
+
+  * {
+    @apply transition-colors duration-200;
   }
 }
 

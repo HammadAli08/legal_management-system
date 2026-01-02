@@ -61,18 +61,18 @@ const Chat: React.FC = () => {
     return (
         <div className="flex flex-col h-full max-w-5xl mx-auto">
             <div className="flex items-center gap-4 mb-0">
-                <div className="p-3 bg-royal rounded-xl shadow-lg shadow-royal/20">
-                    <MessageSquare className="text-gold" size={24} />
+                <div className="p-3 bg-royal dark:bg-dark-accent rounded-xl shadow-lg shadow-royal/20 dark:shadow-dark-accent/20">
+                    <MessageSquare className="text-gold dark:text-dark-primary" size={24} />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-bold text-royal leading-tight tracking-tight">Legal Research Assistant</h2>
-                    <p className="text-gold font-bold text-[10px] uppercase tracking-[0.2em]">Context-Aware Precedent Analysis</p>
+                    <h2 className="text-2xl font-bold text-royal dark:text-cream leading-tight tracking-tight">Legal Research Assistant</h2>
+                    <p className="text-gold dark:text-dark-accent font-bold text-[10px] uppercase tracking-[0.2em]">Context-Aware Precedent Analysis</p>
                 </div>
             </div>
-            <p className="text-slate/40 mb-8 mt-4 text-xs leading-relaxed max-w-3xl border-l border-gold/30 pl-4 py-1">
-                Developed using a massive repository of <span className="text-royal font-bold">4000+ Supreme Court Judgments</span>.
-                The system employs <span className="text-royal font-bold">Retrieval Augmented Generation (RAG)</span> with a
-                <span className="text-royal font-serif italic text-sm"> Cross-Encoder Reranker Retriever</span>, ensuring that only the most legally relevant
+            <p className="text-slate/40 dark:text-dark-text/40 mb-8 mt-4 text-xs leading-relaxed max-w-3xl border-l border-gold/30 dark:border-dark-accent/30 pl-4 py-1">
+                Developed using a massive repository of <span className="text-royal dark:text-dark-accent font-bold">4000+ Supreme Court Judgments</span>.
+                The system employs <span className="text-royal dark:text-dark-accent font-bold">Retrieval Augmented Generation (RAG)</span> with a
+                <span className="text-royal dark:text-dark-accent font-serif italic text-sm"> Cross-Encoder Reranker Retriever</span>, ensuring that only the most legally relevant
                 precedents are synthesized for judicial research.
             </p>
 
@@ -93,24 +93,24 @@ const Chat: React.FC = () => {
                         className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : ''}`}
                     >
                         {msg.role === 'assistant' && (
-                            <div className="w-10 h-10 rounded-full bg-royal flex items-center justify-center shrink-0 shadow-lg">
-                                <Bot size={20} className="text-gold" />
+                            <div className="w-10 h-10 rounded-full bg-royal dark:bg-dark-accent flex items-center justify-center shrink-0 shadow-lg">
+                                <Bot size={20} className="text-gold dark:text-dark-primary" />
                             </div>
                         )}
 
                         <div className={`max-w-[85%] space-y-4`}>
-                            <div className={`p-8 rounded-[2rem] shadow-xl prose max-w-none shadow-royal/5 ${msg.role === 'user'
-                                ? 'bg-bg-burgundy text-burgundy rounded-tr-none border border-burgundy/10'
-                                : 'bg-bg-forest text-forest rounded-tl-none border border-forest/10 leading-relaxed'
+                            <div className={`p-8 rounded-[2rem] shadow-xl prose dark:prose-invert max-w-none shadow-royal/5 dark:shadow-black/20 ${msg.role === 'user'
+                                ? 'bg-bg-burgundy dark:bg-burgundy/20 text-burgundy dark:text-red-300 rounded-tr-none border border-burgundy/10 dark:border-burgundy/30'
+                                : 'bg-bg-forest dark:bg-dark-secondary text-forest dark:text-dark-text rounded-tl-none border border-forest/10 dark:border-dark-border leading-relaxed'
                                 }`}>
                                 <ReactMarkdown
                                     remarkPlugins={[remarkGfm]}
                                     components={{
                                         p: ({ children }) => <p className="mb-4 last:mb-0 text-lg leading-relaxed">{children}</p>,
-                                        strong: ({ children }) => <strong className={`font-bold ${msg.role === 'user' ? 'text-burgundy' : 'text-forest'}`}>{children}</strong>,
+                                        strong: ({ children }) => <strong className={`font-bold ${msg.role === 'user' ? 'text-burgundy dark:text-red-400' : 'text-forest dark:text-dark-success'}`}>{children}</strong>,
                                         ul: ({ children }) => <ul className="list-disc ml-6 mb-4 space-y-2">{children}</ul>,
                                         li: ({ children }) => <li className="opacity-90">{children}</li>,
-                                        h4: ({ children }) => <h4 className={`text-xl font-bold mt-6 mb-2 ${msg.role === 'user' ? 'text-burgundy' : 'text-forest'}`}>{children}</h4>,
+                                        h4: ({ children }) => <h4 className={`text-xl font-bold mt-6 mb-2 ${msg.role === 'user' ? 'text-burgundy dark:text-red-400' : 'text-forest dark:text-dark-success'}`}>{children}</h4>,
                                     }}
                                 >
                                     {msg.content}
@@ -119,16 +119,16 @@ const Chat: React.FC = () => {
 
                             {msg.sources && msg.sources.length > 0 && (
                                 <div className="space-y-2 ml-4">
-                                    <p className="text-[10px] text-royal/40 uppercase tracking-[0.2em] font-black">Relevant Authorities</p>
+                                    <p className="text-[10px] text-royal/40 dark:text-dark-text/40 uppercase tracking-[0.2em] font-black">Relevant Authorities</p>
                                     <div className="grid grid-cols-1 gap-2">
                                         {msg.sources.map((source, sIdx) => (
-                                            <div key={sIdx} className="bg-bg-blue border border-royal/5 rounded-2xl overflow-hidden shadow-sm">
+                                            <div key={sIdx} className="bg-bg-blue dark:bg-dark-primary/40 border border-royal/5 dark:border-dark-border rounded-2xl overflow-hidden shadow-sm">
                                                 <button
                                                     onClick={() => setExpandedSource(expandedSource === sIdx ? null : sIdx)}
-                                                    className="w-full px-5 py-3 flex items-center justify-between text-xs text-royal font-bold hover:bg-royal/5 transition-all"
+                                                    className="w-full px-5 py-3 flex items-center justify-between text-xs text-royal dark:text-dark-accent font-bold hover:bg-royal/5 dark:hover:bg-dark-accent/10 transition-all"
                                                 >
-                                                    <span className="truncate text-royal">Judicial Source #{sIdx + 1}</span>
-                                                    <ChevronDown size={14} className={`text-royal transition-transform ${expandedSource === sIdx ? 'rotate-180' : ''}`} />
+                                                    <span className="truncate text-royal dark:text-dark-accent">Judicial Source #{sIdx + 1}</span>
+                                                    <ChevronDown size={14} className={`text-royal dark:text-dark-accent transition-transform ${expandedSource === sIdx ? 'rotate-180' : ''}`} />
                                                 </button>
                                                 <AnimatePresence>
                                                     {expandedSource === sIdx && (
@@ -138,7 +138,7 @@ const Chat: React.FC = () => {
                                                             exit={{ height: 0 }}
                                                             className="overflow-hidden"
                                                         >
-                                                            <div className="px-6 pb-6 pt-2 text-sm text-royal/70 italic leading-relaxed border-t border-royal/5">
+                                                            <div className="px-6 pb-6 pt-2 text-sm text-royal/70 dark:text-dark-text/70 italic leading-relaxed border-t border-royal/5 dark:border-dark-border">
                                                                 {source.content}
                                                             </div>
                                                         </motion.div>
@@ -161,14 +161,14 @@ const Chat: React.FC = () => {
 
                 {loading && (
                     <div className="flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-royal flex items-center justify-center shrink-0 animate-pulse">
-                            <Bot size={20} className="text-gold" />
+                        <div className="w-10 h-10 rounded-full bg-royal dark:bg-dark-accent flex items-center justify-center shrink-0 animate-pulse">
+                            <Bot size={20} className="text-gold dark:text-dark-primary" />
                         </div>
-                        <div className="bg-bg-forest border border-forest/10 p-6 rounded-3xl rounded-tl-none shadow-lg">
+                        <div className="bg-bg-forest dark:bg-dark-secondary border border-forest/10 dark:border-dark-border p-6 rounded-3xl rounded-tl-none shadow-lg">
                             <div className="flex gap-2">
-                                <div className="w-2 h-2 bg-forest rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                                <div className="w-2 h-2 bg-forest rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                                <div className="w-2 h-2 bg-forest rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-forest dark:bg-dark-success rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                <div className="w-2 h-2 bg-forest dark:bg-dark-success rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                <div className="w-2 h-2 bg-forest dark:bg-dark-success rounded-full animate-bounce"></div>
                             </div>
                         </div>
                     </div>
@@ -177,20 +177,20 @@ const Chat: React.FC = () => {
             </div>
 
             {/* Input Area */}
-            <div className="bg-white border border-gold/20 rounded-[2.5rem] p-3 flex items-center gap-3 focus-within:ring-4 focus-within:ring-gold/10 transition-all shadow-2xl shadow-gold/5">
+            <div className="bg-white dark:bg-dark-secondary border border-gold/20 dark:border-dark-border rounded-[2.5rem] p-3 flex items-center gap-3 focus-within:ring-4 focus-within:ring-gold/10 dark:focus-within:ring-dark-accent/10 transition-all shadow-2xl shadow-gold/5 dark:shadow-black/20">
                 <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                     placeholder="Submit your judicial inquiry here..."
-                    className="flex-1 bg-transparent border-none focus:ring-0 px-8 py-5 text-royal font-medium placeholder:text-royal/20 text-lg"
+                    className="flex-1 bg-transparent border-none focus:ring-0 px-8 py-5 text-royal dark:text-dark-text font-medium placeholder:text-royal/20 dark:placeholder:text-dark-text/20 text-lg"
                 />
                 <button
                     onClick={handleSend}
                     disabled={loading || !input.trim()}
-                    className="bg-gradient-to-r from-royal to-burgundy hover:scale-105 active:scale-95 text-gold p-5 rounded-3xl shadow-xl shadow-royal/20 transition-all disabled:opacity-50"
+                    className="bg-gradient-to-r from-royal to-burgundy dark:from-dark-accent dark:to-dark-accent hover:scale-105 active:scale-95 text-gold dark:text-dark-primary p-5 rounded-3xl shadow-xl shadow-royal/20 dark:shadow-dark-accent/20 transition-all disabled:opacity-50"
                 >
-                    {loading ? <Loader2 className="animate-spin text-gold" size={24} /> : <Send size={24} className="text-gold" />}
+                    {loading ? <Loader2 className="animate-spin text-gold dark:text-dark-primary" size={24} /> : <Send size={24} className="text-gold dark:text-dark-primary" />}
                 </button>
             </div>
         </div>
