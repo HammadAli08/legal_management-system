@@ -11,11 +11,14 @@ load_dotenv()
 print(">>> Starting Startup Sequence...")
 import sys
 import os
-# Add the project root to sys.path to resolve 'backend' module when running on Render
+# Add the project root and current dir to sys.path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
-print(f">>> sys.path updated with: {parent_dir}")
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+print(f">>> sys.path updated (parent: {parent_dir}, current: {current_dir})")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
