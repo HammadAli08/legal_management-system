@@ -19,7 +19,7 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "python-multipart>=0.0.21",
     "qdrant-client>=1.16.2",
-    "scikit-learn>=1.8.0",
+    "scikit-learn==1.7.2",
     "sentence-transformers>=5.2.0",
     "uvicorn>=0.40.0",
 ]

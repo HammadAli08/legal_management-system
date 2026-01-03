@@ -27,7 +27,7 @@ def get_rag_chain():
     print(">>> [RAG] Loading heavy dependencies...")
     from langchain_qdrant import QdrantVectorStore
     from qdrant_client import QdrantClient
-    from langchain_huggingface import HuggingFaceInferenceAPIEmbeddings
+    from langchain_huggingface import HuggingFaceEndpointEmbeddings
     from langchain_groq import ChatGroq
     from langchain_classic.chains import create_retrieval_chain, create_history_aware_retriever
     from langchain_classic.chains.combine_documents import create_stuff_documents_chain
@@ -46,11 +46,11 @@ def get_rag_chain():
         raise ValueError(error_msg.strip())
 
     try:
-        print(">>> [RAG] Initializing Embeddings via HuggingFace Inference API...")
-        # Note: Using API instead of local model to save RAM/CPU
-        embeddings = HuggingFaceInferenceAPIEmbeddings(
-            api_key=HF_TOKEN,
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        print(">>> [RAG] Initializing Embeddings via HuggingFace Endpoint...")
+        # Note: Using Endpoint to avoid deprecation and large local models
+        embeddings = HuggingFaceEndpointEmbeddings(
+            huggingfacehub_api_token=HF_TOKEN,
+            model="sentence-transformers/all-MiniLM-L6-v2"
         )
         
         print(">>> [RAG] Connecting to Qdrant...")
@@ -129,7 +129,9 @@ def get_rag_chain():
         print(">>> [RAG] System Ready.")
         return _rag_chain
     except Exception as e:
-        raise RuntimeError(f"Failed to initialize RAG chain: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise RuntimeError(f"Failed to initialize RAG chain: {type(e).__name__}: {str(e)}")
 
 @router.post("/chat")
 async def chat(input_data: ChatInput):
