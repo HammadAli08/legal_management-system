@@ -9,7 +9,6 @@ langchain-groq
 langchain-huggingface
 langchain-qdrant
 qdrant-client
-sentence-transformers
 langchain-community
 langchain-classic
 pandas
