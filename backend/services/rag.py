@@ -61,7 +61,7 @@ def get_rag_chain():
         base_retriever = vector_store.as_retriever(search_kwargs={"k": 10})
 
         print(">>> [RAG] Initializing Groq LLM for QA and Reranking...")
-        llm = ChatGroq(model_name="openai/gpt-oss-120b", api_key=GROQ_API_KEY, temperature=0.1)
+        llm = ChatGroq(model_name="llama-3.3-70b-versatile", api_key=GROQ_API_KEY, temperature=0.1)
 
         # Custom Reranking Tool using LLM Logic (Faster than local Cross-Encoder on constrained HW)
         class GroqReranker:
@@ -70,14 +70,14 @@ def get_rag_chain():
             
             def compress_documents(self, documents, query):
                 print(f">>> [RAG] Reranking {len(documents)} docs using Groq...")
-                # We'll pick the top 4 most relevant docs using a quick LLM filter/ranking
+                # We'll pick the top 5 most relevant docs using a quick LLM filter/ranking
                 # This is much lighter than loading an 80MB local model
-                return documents[:4] # User requested 3 or 4 chunks.
+                return documents[:5] # User requested 5 chunks.
 
         print(">>> [RAG] Creating API-based Compression Retriever...")
         # Since we use LLM logic, we'll implement a custom compression step if needed or just limit k
-        # For maximum speed, we'll set k=4 in the base retriever and skip local cross-encoding
-        compression_retriever = vector_store.as_retriever(search_kwargs={"k": 4})
+        # For maximum speed, we'll set k=5 in the base retriever and skip local cross-encoding
+        compression_retriever = vector_store.as_retriever(search_kwargs={"k": 5})
 
         # Contextualize Question
         contextualize_q_system_prompt = (
