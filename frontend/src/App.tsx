@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Scale, AlertTriangle, MessageSquare, Home, ChevronRight, Gavel, Sun, Moon } from 'lucide-react';
+import { Scale, AlertTriangle, MessageSquare, Home, ChevronRight, ChevronLeft, Gavel, Sun, Moon } from 'lucide-react';
 import Classifier from './components/Classifier';
 import Prioritizer from './components/Prioritizer';
 import Chat from './components/Chat';
 
 const App: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'home' | 'classify' | 'prioritize' | 'chat'>('home');
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem('theme');
         return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -34,49 +35,102 @@ const App: React.FC = () => {
             {/* Sidebar */}
             <motion.div
                 initial={{ x: -250 }}
-                animate={{ x: 0 }}
-                className="w-64 bg-royal dark:bg-dark-secondary flex flex-col p-6 shadow-2xl z-20 border-r border-cream/10 dark:border-dark-border"
+                animate={{
+                    x: 0,
+                    width: isSidebarCollapsed ? 84 : 256
+                }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                className="bg-royal dark:bg-dark-secondary flex flex-col p-4 shadow-2xl z-20 border-r border-cream/10 dark:border-dark-border"
             >
-                <div className="flex items-center justify-between mb-10">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gold/20 rounded-lg">
-                            <Gavel className="text-gold w-6 h-6" />
-                        </div>
-                        <h1 className="text-xl font-bold tracking-tight text-cream">Legal toolkit</h1>
-                    </div>
+                <div className="flex items-center justify-between mb-10 px-2">
+                    <AnimatePresence mode="wait">
+                        {!isSidebarCollapsed && (
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                className="flex items-center gap-3 overflow-hidden whitespace-nowrap"
+                            >
+                                <div className="p-2 bg-gold/20 rounded-lg shrink-0">
+                                    <Gavel className="text-gold w-6 h-6" />
+                                </div>
+                                <h1 className="text-xl font-bold tracking-tight text-cream">Legal toolkit</h1>
+                            </motion.div>
+                        )}
+                        {isSidebarCollapsed && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                className="flex justify-center w-full"
+                            >
+                                <div className="p-2 bg-gold/20 rounded-lg">
+                                    <Gavel className="text-gold w-6 h-6" />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {!isSidebarCollapsed && (
+                        <button
+                            onClick={() => setIsSidebarCollapsed(true)}
+                            className="p-2 hover:bg-white/10 rounded-full text-cream/70 hover:text-gold transition-colors"
+                        >
+                            <ChevronLeft size={20} />
+                        </button>
+                    )}
                 </div>
 
-                <div className="mb-8">
+                {isSidebarCollapsed && (
+                    <div className="flex justify-center mb-8">
+                        <button
+                            onClick={() => setIsSidebarCollapsed(false)}
+                            className="p-2 hover:bg-white/10 rounded-full text-cream/70 hover:text-gold transition-colors"
+                        >
+                            <ChevronRight size={20} />
+                        </button>
+                    </div>
+                )}
+
+                <div className="mb-8 px-2">
                     <button
                         onClick={() => setDarkMode(!darkMode)}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-cream transition-all border border-white/10"
+                        className={`flex items-center gap-3 rounded-xl bg-white/5 hover:bg-white/10 text-cream transition-all border border-white/10 ${isSidebarCollapsed ? 'p-3 justify-center' : 'px-4 py-3 w-full'}`}
+                        title={isSidebarCollapsed ? (darkMode ? 'Light Aesthetics' : 'Night Protocol') : ''}
                     >
                         {darkMode ? <Sun size={20} className="text-gold" /> : <Moon size={20} className="text-gold" />}
-                        <span className="font-bold text-sm">{darkMode ? 'Light Aesthetics' : 'Night Protocol'}</span>
+                        {!isSidebarCollapsed && <span className="font-bold text-sm whitespace-nowrap">{darkMode ? 'Light Aesthetics' : 'Night Protocol'}</span>}
                     </button>
                 </div>
 
-                <nav className="flex-1 space-y-3">
+                <nav className="flex-1 space-y-3 px-2">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${activeTab === tab.id
-                                ? 'bg-gradient-to-r from-gold to-[#F4D03F] text-royal dark:text-dark-primary shadow-lg translate-x-1'
+                            title={isSidebarCollapsed ? tab.label : ''}
+                            className={`flex items-center gap-3 rounded-xl transition-all duration-300 group ${isSidebarCollapsed ? 'p-3 justify-center' : 'w-full px-4 py-3'} ${activeTab === tab.id
+                                ? 'bg-gradient-to-r from-gold to-[#F4D03F] text-royal dark:text-dark-primary shadow-lg'
                                 : 'hover:bg-gold/10 text-cream/70 hover:text-gold'
                                 }`}
                         >
                             <tab.icon size={20} className={activeTab === tab.id ? 'text-royal' : 'group-hover:text-gold'} />
-                            <span className="font-bold">{tab.label}</span>
-                            {activeTab === tab.id && <ChevronRight size={16} className="ml-auto" />}
+                            {!isSidebarCollapsed && <span className="font-bold whitespace-nowrap">{tab.label}</span>}
+                            {!isSidebarCollapsed && activeTab === tab.id && <ChevronRight size={16} className="ml-auto" />}
                         </button>
                     ))}
                 </nav>
 
-                <div className="mt-auto pt-6 border-t border-cream/10">
-                    <p className="text-[10px] text-cream/40 text-center uppercase tracking-[0.2em] font-bold">
-                        build for Uraan AI techatone
-                    </p>
+                <div className={`mt-auto pt-6 border-t border-cream/10 ${isSidebarCollapsed ? 'px-0' : 'px-2'}`}>
+                    {!isSidebarCollapsed ? (
+                        <p className="text-[10px] text-cream/40 text-center uppercase tracking-[0.2em] font-bold">
+                            build for Uraan AI techatone
+                        </p>
+                    ) : (
+                        <div className="flex justify-center">
+                            <span className="text-[10px] text-gold font-bold">UA</span>
+                        </div>
+                    )}
                 </div>
             </motion.div>
 
@@ -132,15 +186,26 @@ const App: React.FC = () => {
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-16">
                                     {[
-                                        { name: "Hammad Ali Tahir", detail: "University of Education Lahore" },
-                                        { name: "Muhammad Usama Sharaf", detail: "Data Scientist at Algo" },
-                                        { name: "Madiha Farman", detail: "Kohat University of Science and Technology" },
-                                        { name: "Muhammad Zeeshan", detail: "Leads University Lahore" }
+                                        { name: "Hammad Ali Tahir", detail: "University of Education Lahore", link: "https://www.linkedin.com/in/hammad-ali08/" },
+                                        { name: "Muhammad Usama Sharaf", detail: "Data Scientist at Algo", link: "https://www.linkedin.com/in/muhammad-usama-sharaf/" },
+                                        { name: "Madiha Farman", detail: "Kohat University of Science and Technology", link: "https://www.linkedin.com/in/madiha-farman-205aa6324/" },
+                                        { name: "Muhammad Zeeshan", detail: "Leads University Lahore", link: "https://www.linkedin.com/in/muhammad-zeeshan-37b106249/" }
                                     ].map((member, i) => (
                                         <div key={i} className="flex flex-col group">
-                                            <span className="font-bold text-royal dark:text-dark-text text-lg flex items-center gap-3 transition-colors group-hover:text-gold dark:group-hover:text-dark-accent">
-                                                {member.name}
-                                            </span>
+                                            {member.link ? (
+                                                <a
+                                                    href={member.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="font-bold text-royal dark:text-dark-text text-lg flex items-center gap-3 transition-all hover:text-gold dark:hover:text-dark-accent hover:translate-x-1"
+                                                >
+                                                    {member.name}
+                                                </a>
+                                            ) : (
+                                                <span className="font-bold text-royal dark:text-dark-text text-lg flex items-center gap-3 transition-colors group-hover:text-gold dark:group-hover:text-dark-accent">
+                                                    {member.name}
+                                                </span>
+                                            )}
                                             <span className="text-slate/50 dark:text-dark-text/40 text-sm mt-1">{member.detail}</span>
                                         </div>
                                     ))}
