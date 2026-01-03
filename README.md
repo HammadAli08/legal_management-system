@@ -2,8 +2,8 @@
 
 A prestigious, AI-powered toolkit for judicial professionals, featuring case classification, urgency prioritization, and a context-aware legal assistant trained on thousands of precedents.
 
+
 **Live Application**: [https://legal-management-system-x9sc.onrender.com](https://legal-management-system-x9sc.onrender.com)
-**Service ID**: `srv-d5bqdgili9vc73btfllg`
 
 ## 🏛️ Overview
 
@@ -75,10 +75,10 @@ The Legal AI Management System is designed to revolutionize legal workflows with
 
 ## 👥 Development Team
 
--   **Hammad Ali Tahir** – University of Education Lahore
--   **Muhammad Usama Sharaf** – Data Scientist at Algo
--   **Madiha Farman** – Kohat University of Science and Technology
--   **Muhammad Zeeshan** – Leads University Lahore
+-   **[Hammad Ali Tahir](https://www.linkedin.com/in/hammad-ali08/)** – University of Education Lahore
+-   **[Muhammad Usama Sharaf](https://www.linkedin.com/in/muhammad-usama-sharaf/)** – Data Scientist at Algo
+-   **[Madiha Farman](https://www.linkedin.com/in/madiha-farman-205aa6324/)** – Kohat University of Science and Technology
+-   **[Muhammad Zeeshan](https://www.linkedin.com/in/muhammad-zeeshan-37b106249/)** – Leads University Lahore
 
 ---
 

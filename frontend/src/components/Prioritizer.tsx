@@ -65,6 +65,12 @@ const Prioritizer: React.FC = () => {
                     ref={textareaRef}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handlePredict();
+                        }
+                    }}
                     placeholder="Paste the case text here to determine processing priority..."
                     className="w-full min-h-[120px] bg-cream/50 dark:bg-dark-primary/50 border border-gold/10 dark:border-dark-border rounded-3xl p-8 text-royal dark:text-dark-text placeholder:text-royal/20 dark:placeholder:text-dark-text/20 focus:outline-none focus:ring-4 focus:ring-gold/10 dark:focus:ring-dark-accent/10 focus:border-gold/30 dark:focus:border-dark-accent/30 transition-all resize-none mb-8 leading-relaxed text-lg overflow-hidden"
                 />
